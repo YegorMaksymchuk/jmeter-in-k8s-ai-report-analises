@@ -1,0 +1,1 @@
+java -jar ./JMETER_HOME/bin/ApacheJMeter.jar -n -t ./test/test.jmx -l ./results/test.jtl

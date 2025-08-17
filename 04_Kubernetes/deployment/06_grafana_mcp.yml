@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-mcp
+  namespace: jmeter
+spec:
+  type: NodePort
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30000
+  selector:
+    app: grafana-mcp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-mcp 
+  namespace: jmeter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-mcp
+  template:
+    metadata:
+      labels:
+        app: grafana-mcp
+    spec:
+      containers:
+        - name: grafana-mcp
+          image: mcp/grafana
+          ports:
+            - containerPort: 8000
+          env:
+            - name: GRAFANA_API_KEY
+              value: Your Service Account Token
+            - name: GRAFANA_URL
+              value: http://grafana.jmeter.svc.cluster.local:3000

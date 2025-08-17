@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    networks:
+      - jmeter-net
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - jmeter-net
+
+#  jmeter-slave-1:
+#    image: demo/jmeter-custom:1.0.0
+#    container_name: jmeter-slave-1
+#    command: server
+#    volumes:
+#      - ./test:/opt/apache-jmeter-5.5/test
+#    networks:
+#      - jmeter-net
+#
+#  jmeter-slave-2:
+#    image: demo/jmeter-custom:1.0.0
+#    container_name: jmeter-slave-2
+#    command: server
+#    volumes:
+#      - ./test:/opt/apache-jmeter-5.5/test
+#    networks:
+#      - jmeter-net
+
+  jmeter-master:
+    image: demo/jmeter-custom:1.0.0
+    container_name: jmeter-master
+#    depends_on:
+#      - jmeter-slave-1
+#      - jmeter-slave-2
+    volumes:
+      - ./test:/opt/apache-jmeter-5.5/test
+    command: >
+      jmeter -n -t /opt/apache-jmeter-5.5/test/test.jmx 
+             -R jmeter-slave-1,jmeter-slave-2 
+             -l /opt/apache-jmeter-5.5/test/results.jtl
+    networks:
+      - jmeter-net
+
+networks:
+  jmeter-net:
+    driver: bridge
