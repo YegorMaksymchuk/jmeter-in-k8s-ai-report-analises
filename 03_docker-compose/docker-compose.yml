@@ -37,20 +37,20 @@ services:
 #    networks:
 #      - jmeter-net
 
-  jmeter-master:
-    image: demo/jmeter-custom:1.0.0
-    container_name: jmeter-master
+#  jmeter-master:
+#    image: demo/jmeter-custom:1.0.0
+#    container_name: jmeter-master
 #    depends_on:
 #      - jmeter-slave-1
 #      - jmeter-slave-2
-    volumes:
-      - ./test:/opt/apache-jmeter-5.5/test
-    command: >
-      jmeter -n -t /opt/apache-jmeter-5.5/test/test.jmx 
-             -R jmeter-slave-1,jmeter-slave-2 
-             -l /opt/apache-jmeter-5.5/test/results.jtl
-    networks:
-      - jmeter-net
+#    volumes:
+#      - ./test:/opt/apache-jmeter-5.5/test
+#    command: >
+#      jmeter -n -t /opt/apache-jmeter-5.5/test/test.jmx
+#             -R jmeter-slave-1,jmeter-slave-2
+#             -l /opt/apache-jmeter-5.5/test/results.jtl
+#    networks:
+#      - jmeter-net
 
 networks:
   jmeter-net:
